@@ -1,0 +1,55 @@
+<div class="w-full h-screen flex items-center justify-center bg-gray-100">
+  <div id="tinder-cards" class="relative w-[90vw] max-w-md h-[80vh]">
+    <!-- Voorbeeld auto kaarten -->
+    <div class="tinder--card absolute w-full h-full bg-white rounded-2xl shadow-xl p-6 transition-all duration-500">
+      <img src="https://via.placeholder.com/300x200?text=Opel+Corsa" alt="Opel Corsa" class="rounded-xl w-full h-48 object-cover mb-4">
+      <h2 class="text-xl font-bold">Opel Corsa</h2>
+      <p class="text-gray-600 text-sm">Compact, zuinig en perfect voor de stad.</p>
+    </div>
+
+    <div class="tinder--card absolute w-full h-full bg-white rounded-2xl shadow-xl p-6 transition-all duration-500">
+      <img src="https://via.placeholder.com/300x200?text=Peugeot+208" alt="Peugeot 208" class="rounded-xl w-full h-48 object-cover mb-4">
+      <h2 class="text-xl font-bold">Peugeot 208</h2>
+      <p class="text-gray-600 text-sm">Frans design met sportieve flair en slimme tech.</p>
+    </div>
+
+    <!-- Voeg hier meer cards toe... -->
+  </div>
+</div>
+
+<script>
+  const cardsContainer = document.getElementById("tinder-cards");
+  let allCards = cardsContainer.querySelectorAll(".tinder--card");
+
+  function initCards() {
+    allCards = cardsContainer.querySelectorAll(".tinder--card");
+
+    allCards.forEach((card, index) => {
+      card.style.zIndex = allCards.length - index;
+      card.style.transform = `scale(${1 - index * 0.03}) translateY(${index * 10}px)`;
+      card.style.opacity = index === 0 ? 1 : 0.8;
+    });
+  }
+
+  function swipeCard(direction) {
+    const card = allCards[0];
+    if (!card) return;
+
+    const moveX = direction === "right" ? 1000 : -1000;
+    card.style.transform = `translate(${moveX}px, -100px) rotate(${direction === "right" ? 20 : -20}deg)`;
+    card.classList.add("removed");
+
+    setTimeout(() => {
+      card.remove();
+      initCards();
+    }, 300);
+  }
+
+  cardsContainer.addEventListener("click", () => swipeCard("right")); // test: klik is swipe right
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") swipeCard("left");
+    if (e.key === "ArrowRight") swipeCard("right");
+  });
+
+  initCards();
+</script>
