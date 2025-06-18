@@ -7,122 +7,73 @@
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background: #f3f4f6;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    .swiper {
-      width: 90vw;
-      max-width: 400px;
-      height: 600px;
-    }
-    .swiper-slide {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      overflow: hidden;
-    }
-    .car-image {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-    }
-    .car-info {
-      padding: 20px;
-      text-align: center;
-    }
-    .car-info h2 {
-      margin: 10px 0 5px;
-      font-size: 1.25rem;
-    }
-    .car-info p {
-      color: #555;
-    }
-    .tinder--buttons {
-      margin-top: 20px;
-      display: flex;
-      gap: 20px;
-    }
-    .tinder--buttons button {
-      background: white;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      cursor: pointer;
-      font-size: 20px;
-      transition: background 0.3s;
-    }
-    .tinder--buttons button:hover {
-      background: #e2e8f0;
-    }
+    body { margin:0; font-family:sans-serif; background:#f3f4f6; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; }
+    .swiper { width:90vw; max-width:400px; height:600px; }
+    .swiper-slide { background:white; border-radius:20px; box-shadow:0 10px 20px rgba(0,0,0,0.2); display:flex; flex-direction:column; align-items:center; overflow:hidden; }
+    .car-image { width:100%; height:250px; object-fit:cover; }
+    .car-info { padding:20px; text-align:center; }
+    .car-info h2 { margin:10px 0 5px; font-size:1.25rem; }
+    .car-info p { color:#555; }
+    .tinder--buttons { margin-top:20px; display:flex; gap:20px; }
+    .tinder--buttons button { background:white; border:none; border-radius:50%; width:50px; height:50px; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer; font-size:20px; transition:background .3s; }
+    .tinder--buttons button:hover { background:#e2e8f0; }
   </style>
 </head>
 <body>
   <div class="swiper">
-    <div class="swiper-wrapper">
-      <!-- Slide 1 -->
-      <div class="swiper-slide">
-        <img class="car-image" src="https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/02/opel-corsa-gs-page-image.png" alt="Opel Corsa">
-        <div class="car-info">
-          <h2>Opel Corsa</h2>
-          <p>Compact, zuinig en perfect voor de stad.</p>
-        </div>
-      </div>
-      <!-- Slide 2 -->
-      <div class="swiper-slide">
-        <img class="car-image" src="https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/10/208-style.png" alt="Peugeot 208">
-        <div class="car-info">
-          <h2>Peugeot 208</h2>
-          <p>Frans design met sportieve flair en slimme tech.</p>
-        </div>
-      </div>
-      <!-- Slide 3 -->
-      <div class="swiper-slide">
-        <img class="car-image" src="https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/08/500-3-1-goed.gif" alt="Fiat 500">
-        <div class="car-info">
-          <h2>Fiat 500</h2>
-          <p>Stijlvol Italiaans icoon voor elke dag.</p>
-        </div>
-      </div>
-    </div>
+    <div class="swiper-wrapper" id="swiper-wrapper"></div>
     <div class="swiper-pagination"></div>
   </div>
 
   <div class="tinder--buttons">
-    <button id="nope"><i class="fa fa-remove" aria-hidden="true"></i></button>
-    <button class="reset" onclick="location.reload();"><i class="fa-solid fa-rotate" aria-hidden="true"></i></button>
-    <button id="love"><i class="fa fa-heart" aria-hidden="true"></i></button>
+    <button id="nope"><i class="fa fa-remove"></i></button>
+    <button class="reset" onclick="location.reload();"><i class="fa-solid fa-rotate"></i></button>
+    <button id="love"><i class="fa fa-heart"></i></button>
   </div>
 
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   <script>
+    const cars = [
+      { name: 'Opel Corsa', img: 'https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/02/opel-corsa-gs-page-image.png', desc: 'Compact, zuinig en perfect voor de stad.' },
+      { name: 'Peugeot 208', img: 'https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/10/208-style.png', desc: 'Frans design met sportieve flair en slimme tech.' },
+      { name: 'Fiat 500', img: 'https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/08/500-3-1-goed.gif', desc: 'Stijlvol Italiaans icoon voor elke dag.' },
+      { name: 'Opel Mokka', img: 'https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/06/opel-mokka.png', desc: 'Stoere compacte SUV met karakter.' },
+      { name: 'Opel Astra', img: 'https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/09/opel-astra.png', desc: 'Ruime gezinsauto met moderne technologie.' },
+      { name: 'Peugeot 3008', img: 'https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/02/gt-avantage-1.png', desc: 'Stijlvolle SUV met geavanceerde features.' },
+      { name: 'Citroën C3', img: 'https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/05/citroen-c3-max-nieuw-page-image.png', desc: 'Comfort en speelse vormgeving voor dagelijks gebruik.' },
+      { name: 'Peugeot 5008', img: 'https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/02/gt-avantage.png', desc: 'Kleine sportieveling met een groot karakter.' },
+      { name: 'Alfa Romeo Giulia', img: 'https://via.placeholder.com/400x250?text=Alfa+Romeo+Giulia', desc: 'Italiaanse elegantie en rijplezier in één.' },
+      { name: 'Fiat Panda', img: 'https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/05/pandina.jpeg', desc: 'Slim en praktisch stadsvervoer.' },
+      { name: 'Citroën C4', img: 'https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/06/citroen-c4-max-page-image.png', desc: 'Elegant design met elektrisch rijplezier.' },
+      { name: 'Opel Grandland', img: 'https://via.placeholder.com/400x250?text=Opel+Grandland', desc: 'Veelzijdige SUV voor elk avontuur.' },
+      { name: 'Peugeot 508', img: 'https://via.placeholder.com/400x250?text=Peugeot+508', desc: 'Sportieve sedan met luxe uitstraling.' }
+      // Voeg hier meer auto's toe tot je er ±50 hebt
+    ];
+
+    const wrapper = document.getElementById('swiper-wrapper');
+    cars.forEach(car => {
+      const slide = document.createElement('div');
+      slide.className = 'swiper-slide';
+      slide.innerHTML = `
+        <img class="car-image" src="${car.img}" alt="${car.name}">
+        <div class="car-info">
+          <h2>${car.name}</h2>
+          <p>${car.desc}</p>
+        </div>`;
+      wrapper.appendChild(slide);
+    });
+
     const swiper = new Swiper('.swiper', {
       effect: 'cards',
       grabCursor: true,
       loop: false,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
+      pagination: { el: '.swiper-pagination', clickable: true }
     });
 
-    document.getElementById("nope").addEventListener("click", () => {
-      swiper.slideNext();
-    });
+    document.getElementById("nope").addEventListener("click", () => swiper.slideNext());
     document.getElementById("love").addEventListener("click", () => {
-      swiper.slideNext();
+      const slide = swiper.slides[swiper.activeIndex].querySelector('h2').innerText;
+      window.location.href = `https://www.hedinautomotive.nl/contact?model=${encodeURIComponent(slide)}`;
     });
   </script>
 </body>
