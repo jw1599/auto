@@ -3,122 +3,147 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hedin Automotive Swipe</title>
-  <!-- Tailwind via CDN -->
+  <title>Hedin Auto Swipe</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .tinder--card {
+    body {
+      background: #f3f4f6;
+      overflow: hidden;
+    }
+    .card-stack {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      height: 600px;
+    }
+    .car-card {
       position: absolute;
       width: 100%;
       height: 100%;
-      background: #fff;
+      background: white;
       border-radius: 1rem;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      padding: 1.5rem;
-      transition: all 0.3s ease-in-out;
-      user-select: none;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease-out;
       touch-action: none;
+      user-select: none;
     }
-    .tinder--card img {
+    .car-card img {
       width: 100%;
-      height: 200px;
+      height: 260px;
       object-fit: cover;
-      border-radius: 0.75rem;
-      margin-bottom: 1rem;
+      border-radius: 0.75rem 0.75rem 0 0;
     }
-    .removed {
+    .car-card-content {
+      padding: 1rem;
+    }
+    .like, .dislike {
+      position: absolute;
+      top: 2rem;
+      font-size: 2rem;
+      font-weight: bold;
+      z-index: 10;
       pointer-events: none;
+    }
+    .like {
+      left: 1rem;
+      color: green;
+    }
+    .dislike {
+      right: 1rem;
+      color: red;
     }
   </style>
 </head>
-<body class="bg-gray-100 flex justify-center items-center h-screen">
-
-  <div id="tinder-cards" class="relative w-[90vw] max-w-md h-[80vh]">
-    <!-- Auto kaart 1 -->
-    <div class="tinder--card">
+<body class="flex justify-center items-center h-screen">
+  <div class="card-stack" id="card-stack">
+    <!-- Card 1 -->
+    <div class="car-card">
+      <div class="like">LIKE</div>
+      <div class="dislike">NOPE</div>
       <img src="https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/02/opel-corsa-gs-page-image.png" alt="Opel Corsa">
-      <h2 class="text-xl font-bold">Opel Corsa</h2>
-      <p class="text-gray-600">Compact, zuinig en perfect voor de stad.</p>
+      <div class="car-card-content">
+        <h2 class="text-xl font-bold">Opel Corsa</h2>
+        <p class="text-gray-600">Compact, zuinig en perfect voor de stad.</p>
+      </div>
     </div>
-    <!-- Auto kaart 2 -->
-    <div class="tinder--card">
+    <!-- Card 2 -->
+    <div class="car-card">
+      <div class="like">LIKE</div>
+      <div class="dislike">NOPE</div>
       <img src="https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/10/208-style.png" alt="Peugeot 208">
-      <h2 class="text-xl font-bold">Peugeot 208</h2>
-      <p class="text-gray-600">Frans design met sportieve flair en slimme tech.</p>
+      <div class="car-card-content">
+        <h2 class="text-xl font-bold">Peugeot 208</h2>
+        <p class="text-gray-600">Frans design met sportieve flair en slimme tech.</p>
+      </div>
     </div>
-    <!-- Auto kaart 3 -->
-    <div class="tinder--card">
+    <!-- Card 3 -->
+    <div class="car-card">
+      <div class="like">LIKE</div>
+      <div class="dislike">NOPE</div>
       <img src="https://agwpcykpmo.cloudimg.io/v7/https://s3.eu-central-1.amazonaws.com/hedinautomotive-nl/08/500-3-1-goed.gif" alt="Fiat 500">
-      <h2 class="text-xl font-bold">Fiat 500</h2>
-      <p class="text-gray-600">Stijlvol Italiaans icoon voor elke dag.</p>
+      <div class="car-card-content">
+        <h2 class="text-xl font-bold">Fiat 500</h2>
+        <p class="text-gray-600">Stijlvol Italiaans icoon voor elke dag.</p>
+      </div>
     </div>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const container = document.getElementById("tinder-cards");
-      let cards = Array.from(container.querySelectorAll(".tinder--card"));
+    const stack = document.getElementById("card-stack");
+    const cards = stack.querySelectorAll(".car-card");
 
-      function initCards() {
-        cards = Array.from(container.querySelectorAll(".tinder--card"));
-        cards.forEach((c, i) => {
-          c.style.zIndex = cards.length - i;
-          c.style.transform = `scale(${1 - i * 0.04}) translateY(${i * 15}px)`;
-        });
+    let isDragging = false;
+    let startX, currentX;
+    let currentCard = null;
+
+    cards.forEach((card, index) => {
+      card.style.zIndex = cards.length - index;
+    });
+
+    function handleGestureStart(e) {
+      currentCard = e.currentTarget;
+      isDragging = true;
+      startX = e.touches ? e.touches[0].clientX : e.clientX;
+      currentCard.style.transition = "none";
+    }
+
+    function handleGestureMove(e) {
+      if (!isDragging || !currentCard) return;
+      currentX = e.touches ? e.touches[0].clientX : e.clientX;
+      const dx = currentX - startX;
+      currentCard.style.transform = `translateX(${dx}px) rotate(${dx * 0.05}deg)`;
+
+      const like = currentCard.querySelector(".like");
+      const nope = currentCard.querySelector(".dislike");
+      if (dx > 50) like.style.opacity = "1"; else like.style.opacity = "0";
+      if (dx < -50) nope.style.opacity = "1"; else nope.style.opacity = "0";
+    }
+
+    function handleGestureEnd() {
+      if (!isDragging || !currentCard) return;
+      isDragging = false;
+      const dx = currentX - startX;
+
+      if (Math.abs(dx) > 100) {
+        currentCard.style.transition = "transform 0.3s ease-out";
+        currentCard.style.transform = `translateX(${dx > 0 ? 1000 : -1000}px) rotate(${dx > 0 ? 45 : -45}deg)`;
+        setTimeout(() => currentCard.remove(), 300);
+      } else {
+        currentCard.style.transition = "transform 0.3s ease-out";
+        currentCard.style.transform = "translateX(0px) rotate(0deg)";
+        currentCard.querySelector(".like").style.opacity = "0";
+        currentCard.querySelector(".dislike").style.opacity = "0";
       }
+    }
 
-      let startX, startY;
-      const threshold = 100;
-
-      function handleGestureStart(e) {
-        const card = e.currentTarget;
-        const touch = e.touches ? e.touches[0] : e;
-        startX = touch.clientX;
-        startY = touch.clientY;
-        card.style.transition = "none";
-      }
-
-      function handleGestureMove(e) {
-        const card = e.currentTarget;
-        const touch = e.touches ? e.touches[0] : e;
-        const dx = touch.clientX - startX;
-        const dy = touch.clientY - startY;
-        const rotate = dx * 0.1;
-
-        card.style.transform = `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`;
-      }
-
-      function handleGestureEnd(e) {
-        const card = e.currentTarget;
-        card.style.transition = "transform 0.3s ease-out";
-        const dx = parseFloat(card.style.transform.match(/translate\((-?\d+)/)?.[1] || 0);
-
-        const dir = dx > threshold ? 'right' : dx < -threshold ? 'left' : null;
-        if (dir) {
-          card.style.transform = `translate(${dir === 'right' ? 1000 : -1000}px, 0) rotate(${dir === 'right' ? 30 : -30}deg)`;
-          card.classList.add("removed");
-          setTimeout(() => {
-            card.remove();
-            initCards();
-          }, 300);
-        } else {
-          card.style.transform = "";
-        }
-      }
-
-      function bindCard(c) {
-        c.addEventListener("mousedown", handleGestureStart);
-        c.addEventListener("touchstart", handleGestureStart);
-        c.addEventListener("mousemove", handleGestureMove);
-        c.addEventListener("touchmove", handleGestureMove);
-        c.addEventListener("mouseup", handleGestureEnd);
-        c.addEventListener("touchend", handleGestureEnd);
-      }
-
-      cards.forEach(bindCard);
-      initCards();
+    cards.forEach(card => {
+      card.addEventListener("mousedown", handleGestureStart);
+      card.addEventListener("touchstart", handleGestureStart);
+      card.addEventListener("mousemove", handleGestureMove);
+      card.addEventListener("touchmove", handleGestureMove);
+      card.addEventListener("mouseup", handleGestureEnd);
+      card.addEventListener("touchend", handleGestureEnd);
     });
   </script>
-
 </body>
 </html>
